@@ -36,3 +36,13 @@ def test_explain_endpoint_returns_checked_text():
     exp = r.json()["explanation"]
     assert exp["source"] == "template"  # no LLM configured in CI
     assert "{" not in exp["text"] and "in 100" in exp["text"]
+
+
+def test_llm_text_carries_ai_notice(monkeypatch):
+    import app.main as m
+    from app.explain.llm_client import FakeLLM
+    good = "Your chance of lung cancer over the next {plco.horizon} is {plco.display}."
+    monkeypatch.setattr(m, "_llm", lambda: FakeLLM([good]))
+    r = client.post("/explain", json={"questionnaire": Q})
+    body = r.json()
+    assert body["explanation"]["source"] == "llm" and "AI system" in body["ai_notice"]

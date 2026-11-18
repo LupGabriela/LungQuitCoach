@@ -10,6 +10,8 @@ from .template import template_draft
 from .verifier import fill, verify
 
 MAX_ATTEMPTS = 2  # first try + one retry
+SAFE_MINIMAL = ("Your estimated chance of lung cancer over the next {plco.horizon} is "
+                "{plco.display}. This is an estimate from a model, not a diagnosis.")
 
 
 def build_prompt(result: dict, feedback: list[str] | None = None) -> str:
@@ -36,5 +38,8 @@ def explain(result: dict, llm: LLM | None) -> Explanation:
             if not violations:
                 return Explanation(text=fill(draft, result), source="llm", attempts=attempts)
             last = [str(x) for x in violations]
-    return Explanation(text=fill(template_draft(result), result), source="template",
+    draft = template_draft(result)
+    if verify(draft, result):  # fail closed: should never happen (tested on generated cases)
+        draft = SAFE_MINIMAL
+    return Explanation(text=fill(draft, result), source="template",
                        attempts=attempts, violations=last)

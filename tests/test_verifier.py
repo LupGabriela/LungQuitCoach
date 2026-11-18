@@ -109,3 +109,11 @@ def test_mass_not_allowed_by_edema(result):
                       smoking_years=40)
     res = build_result(q, XrayInfo(provided=True, flagged=["Edema"], not_flagged=["Mass"]))
     assert "R7_finding" in rules("There is a mass in your right lung.", res)
+
+
+def test_template_passes_on_generated_cases():
+    from experiments.cases import make_cases
+    for lang in ("en", "ro"):
+        for q, xr in make_cases(200, seed=11, language=lang):
+            res = build_result(q, xr)
+            assert verify(template_draft(res), res) == []

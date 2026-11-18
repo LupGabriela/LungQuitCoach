@@ -21,7 +21,7 @@ fictional cases and public, de-identified images.
 ```bash
 python -m venv .venv && source .venv/bin/activate      # Windows PowerShell: .venv\Scripts\Activate.ps1
 pip install -r requirements-dev.txt
-python -m pytest                                         # 42 tests
+python -m pytest                                         # 44 tests
 uvicorn app.main:app --reload                            # open http://localhost:8000/docs
 ```
 
@@ -38,7 +38,7 @@ Optional local LLM: install Ollama, run `ollama pull qwen3:4b`, then start the A
 ## Experiments (case study)
 
 ```bash
-python -m experiments.e1_verifier --n 100 --seed 2026     # verifier vs number-matching baseline
+python -m experiments.e1_verifier --n 100 --seed 2026 --tag run3_v21  # verifier vs baseline
 python -m experiments.e4_xray_robustness IMG1.png IMG2.png # score change under 18 degradations
 python -m experiments.e5_timing --n 100                    # run time + template readability
 ```

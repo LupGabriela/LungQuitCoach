@@ -4,7 +4,8 @@ These texts are written by hand to TEST the verifier; they are not LLM outputs.
 Two sets of error variants exist:
   * DEV variants  - the wording used while the verifier rules were written;
   * TEST variants - other wordings (synonyms, paraphrases) written before the
-    first E1 run. The verifier was not changed after seeing E1 results.
+    first E1 run. The verifier WAS changed after run 1 (v2), so test results of
+    later runs are not blind; TEST_B (below) was written before v2 was run.
 Correct drafts include some tricky but correct wordings (negation, "less",
 "not a diagnosis") so that false alarms can be measured.
 """

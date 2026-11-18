@@ -54,7 +54,10 @@ def main(n: int) -> dict:
         r = client.post("/explain", json=body)
         t_api.append(time.perf_counter() - t0)
         assert r.status_code == 200
-    s = {"n_cases": n,
+    import os, platform
+    s = {"machine": {"python": platform.python_version(), "cpu_count": os.cpu_count(),
+                     "processor": platform.processor() or platform.machine()},
+         "n_cases": n,
          "core_pipeline": stats(t_core), "api_round_trip": stats(t_api),
          "peak_python_memory_mb": round(peak / 1e6, 2),
          "template_passes_verifier": f"{verified}/{n}",

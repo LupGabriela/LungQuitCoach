@@ -1,8 +1,8 @@
 """Experiment E1 (case study, small scale): how well does the verifier detect
 deliberate errors, compared with a simple number-matching check?
 
-Run:  python -m experiments.e1_verifier --n 100 --seed 2026
-Writes experiments/results/e1_texts.csv and e1_summary.json
+Run:  python -m experiments.e1_verifier --n 100 --seed 2026 --tag run3_v21
+Writes experiments/results/e1_<tag>_texts.csv and e1_<tag>_summary.json
 """
 from __future__ import annotations
 
@@ -47,7 +47,7 @@ def ci(x: list[int]) -> list[float]:
     return [round(float(r.confidence_interval.low), 3), round(float(r.confidence_interval.high), 3)]
 
 
-def main(n: int, seed: int) -> dict:
+def main(n: int, seed: int, tag: str = "latest") -> dict:
     rng = random.Random(seed)
     rows = []
     for i, (q, xr) in enumerate(make_cases(n, seed)):
@@ -103,14 +103,14 @@ def main(n: int, seed: int) -> dict:
                                                  "precision": round(prec, 3),
                                                  "recall": round(rec, 3), "f1": round(f1, 3)}
     OUT.mkdir(exist_ok=True)
-    with open(OUT / "e1_run3_v21_texts.csv", "w", newline="", encoding="utf-8") as f:
+    with open(OUT / f"e1_{tag}_texts.csv", "w", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
         w.writerow(["case", "split", "error_type", "injected", "verifier_flag", "verifier_rules",
                     "baseline_flag", "draft"])
         for r in rows:
             w.writerow([r["case"], r["split"], r["error_type"], r["op"], r["verifier_flag"],
                         "|".join(r["verifier_rules"]), r["baseline_flag"], r["draft"]])
-    (OUT / "e1_run3_v21_summary.json").write_text(json.dumps(summary, indent=2), encoding="utf-8")
+    (OUT / f"e1_{tag}_summary.json").write_text(json.dumps(summary, indent=2), encoding="utf-8")
     return summary
 
 
@@ -118,8 +118,9 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--n", type=int, default=100)
     ap.add_argument("--seed", type=int, default=2026)
+    ap.add_argument("--tag", default="latest")
     a = ap.parse_args()
-    s = main(a.n, a.seed)
+    s = main(a.n, a.seed, a.tag)
     print(json.dumps({k: v for k, v in s.items() if k != "per_type"}, indent=2))
     for k, v in s["per_type"].items():
         print(f"{k:22s} verifier={v['verifier_recall']:.2f} {v['verifier_ci95']} "

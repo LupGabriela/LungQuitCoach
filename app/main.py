@@ -13,6 +13,9 @@ from .imaging import xray
 from .result import build_result
 from .schemas import ExplainRequest, Questionnaire, XrayInfo
 
+AI_NOTICE = ("This explanation was written by an AI system from your numbers and checked "
+             "automatically. It is not a diagnosis.")
+
 app = FastAPI(title="Lung Health & Quit Coach (research prototype)", version="0.1.0")
 
 
@@ -39,9 +42,13 @@ def explain_endpoint(req: ExplainRequest) -> dict:
     t0 = time.perf_counter()
     result = build_result(req.questionnaire, req.xray)
     exp = explain(result, _llm())
-    return {"result": result, "explanation": exp.model_dump(),
+    body = {"result": result, "explanation": exp.model_dump(),
             "notice": "Research prototype. Illustration and estimates only, not a diagnosis.",
             "elapsed_ms": round((time.perf_counter() - t0) * 1000, 1)}
+    # AI Act Art. 50: tell the reader when a text was written by an AI system
+    if exp.source == "llm":
+        body["ai_notice"] = AI_NOTICE
+    return body
 
 
 @app.post("/xray")

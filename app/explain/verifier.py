@@ -15,8 +15,8 @@ thesis error taxonomy:
   R7 finding            X-ray finding that is not in the structured result
 
 Known limits (reported in the thesis): synonyms that are not in the lists are
-missed; negation is handled only for the direction rule; meaning errors that use
-none of the listed words are not caught.
+missed; negation is handled only by the direction and finding rules; meaning
+errors that use none of the listed words are not caught.
 """
 from __future__ import annotations
 
