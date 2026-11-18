@@ -19,7 +19,9 @@ from scipy.stats import bootstrap
 from app.explain.verifier import baseline_check, fill, verify
 from app.result import build_result
 from experiments.cases import make_cases
-from experiments.texts import DEV, ERROR_TYPES, TEST, correct_draft, inject
+from experiments.texts import DEV, ERROR_TYPES, TEST, TEST_B, correct_draft, inject
+
+SPLITS = (("dev", DEV), ("test", TEST), ("test_b", TEST_B))
 
 OUT = Path(__file__).parent / "results"
 EXPECTED_RULE = {"number": "R1_number", "period": "R2_period", "unit": "R3_unit",
@@ -51,12 +53,13 @@ def main(n: int, seed: int) -> dict:
     for i, (q, xr) in enumerate(make_cases(n, seed)):
         res = build_result(q, xr)
         good = correct_draft(res, rng)
-        rows.append(dict(case=i, split="correct", error_type="none", draft=good, result=res))
+        rows.append(dict(case=i, split="correct", error_type="none", op="", draft=good, result=res))
         for et in ERROR_TYPES:
-            for split, pool in (("dev", DEV), ("test", TEST)):
+            for split, pool in SPLITS:
                 ops = [op for op in pool[et] if et != "finding" or _finding_ok(op, res)]
                 op = rng.choice(ops)
-                rows.append(dict(case=i, split=split, error_type=et, draft=inject(good, op), result=res))
+                rows.append(dict(case=i, split=split, error_type=et, op=" / ".join(op[1:]) or op[0],
+                                 draft=inject(good, op), result=res))
 
     for r in rows:
         v = verify(r["draft"], r["result"])
@@ -73,7 +76,7 @@ def main(n: int, seed: int) -> dict:
         "baseline": round(sum(r["baseline_flag"] for r in correct) / len(correct), 3)}
     summary["false_alarm_examples"] = [
         {"draft": r["draft"], "rules": r["verifier_rules"]} for r in correct if r["verifier_flag"]][:5]
-    for split in ("dev", "test"):
+    for split, _ in SPLITS:
         for et in ERROR_TYPES:
             sub = [r for r in rows if r["split"] == split and r["error_type"] == et]
             vf = [r["verifier_flag"] for r in sub]
@@ -83,10 +86,11 @@ def main(n: int, seed: int) -> dict:
                 "verifier_recall": round(float(np.mean(vf)), 3), "verifier_ci95": ci(vf),
                 "expected_rule_hit": round(float(np.mean([r["expected_rule_hit"] for r in sub])), 3),
                 "baseline_recall": round(float(np.mean(bf)), 3), "baseline_ci95": ci(bf),
-                "missed_examples": sorted({r["draft"].split(". ")[1] for r in sub
-                                           if not r["verifier_flag"]})[:4],
+                "missed_by_variant": {o: sum(1 for r in sub if r["op"] == o and not r["verifier_flag"])
+                                      for o in sorted({r["op"] for r in sub})
+                                      if any(r["op"] == o and not r["verifier_flag"] for r in sub)},
             }
-    for split in ("dev", "test"):
+    for split, _ in SPLITS:
         err = [r for r in rows if r["split"] == split]
         for who in ("verifier", "baseline"):
             tp = sum(r[f"{who}_flag"] for r in err)
@@ -99,14 +103,14 @@ def main(n: int, seed: int) -> dict:
                                                  "precision": round(prec, 3),
                                                  "recall": round(rec, 3), "f1": round(f1, 3)}
     OUT.mkdir(exist_ok=True)
-    with open(OUT / "e1_texts.csv", "w", newline="", encoding="utf-8") as f:
+    with open(OUT / "e1_run2_v2_texts.csv", "w", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
-        w.writerow(["case", "split", "error_type", "verifier_flag", "verifier_rules",
+        w.writerow(["case", "split", "error_type", "injected", "verifier_flag", "verifier_rules",
                     "baseline_flag", "draft"])
         for r in rows:
-            w.writerow([r["case"], r["split"], r["error_type"], r["verifier_flag"],
+            w.writerow([r["case"], r["split"], r["error_type"], r["op"], r["verifier_flag"],
                         "|".join(r["verifier_rules"]), r["baseline_flag"], r["draft"]])
-    (OUT / "e1_summary.json").write_text(json.dumps(summary, indent=2), encoding="utf-8")
+    (OUT / "e1_run2_v2_summary.json").write_text(json.dumps(summary, indent=2), encoding="utf-8")
     return summary
 
 

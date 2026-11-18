@@ -29,7 +29,7 @@ MARKER_RE = re.compile(r"\{([a-z0-9_.]+)\}")
 DIGIT_RE = re.compile(r"\d")
 
 NUMBER_WORDS = {
-    "en": ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine",
+    "en": ["zero", "two", "three", "four", "five", "six", "seven", "eight", "nine",
            "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen",
            "seventeen", "eighteen", "nineteen", "twenty", "thirty", "forty", "fifty",
            "sixty", "seventy", "eighty", "ninety", "hundred", "thousand", "million",
@@ -38,10 +38,10 @@ NUMBER_WORDS = {
            "șapte", "sapte", "opt", "nouă", "noua", "zece", "douăzeci", "sută", "suta",
            "sute", "mie", "mii", "jumătate", "jumatate", "dublu", "triplu", "sfert"],
 }
-# "one" is common in normal English ("no one", "one of"), so it is allowed in a
-# small set of fixed phrases.
-ALLOWED_NUMBER_PHRASES = {"en": ["no one", "one of", "someone", "anyone", "everyone", "one way"],
-                          "ro": []}
+# v2: "one" is common in normal English ("one person", "no one"), so it counts as
+# a number only when used as a quantity ("one in fifty", "one out of", "one percent").
+ONE_AS_NUMBER = re.compile(r"(?<![\w-])one(?=\s+(?:in|out|per|of every|hundred|thousand|percent)\b|\s*%)")
+ALLOWED_NUMBER_PHRASES = {"en": [], "ro": []}
 
 PERIOD_PHRASES = {
     "en": ["lifetime", "per year", "each year", "every year", "annual", "annually",
@@ -138,7 +138,11 @@ def verify(draft: str, result: dict) -> list[Violation]:
     scrub = low_words
     for ph in ALLOWED_NUMBER_PHRASES.get(lang, []):
         scrub = scrub.replace(ph, " ")
+    if lang == "en" and ONE_AS_NUMBER.search(scrub):
+        v.append(Violation("R1_number", "number word 'one'"))
     for w in NUMBER_WORDS[lang]:
+        if any(x.rule == "R1_number" and "word" in x.detail for x in v):
+            break
         if re.search(r"(?<![\w-])" + re.escape(w) + r"(?![\w-])", scrub):
             v.append(Violation("R1_number", f"number word '{w}'"))
             break
@@ -179,7 +183,8 @@ def verify(draft: str, result: dict) -> list[Violation]:
         if negated:
             said_up, said_down = said_down, said_up
         truth = directions[scen]
-        if (said_up and truth == "lower") or (said_down and truth == "higher"):
+        # v2: "similar" also makes up/down words wrong
+        if (said_up and truth != "higher") or (said_down and truth != "lower"):
             v.append(Violation("R4_direction", f"'{scen}' described in the wrong direction"))
             break
 
@@ -195,12 +200,27 @@ def verify(draft: str, result: dict) -> list[Violation]:
             v.append(Violation("R6_diagnosis", pat))
             break
 
-    # R7: findings must be in the structured result
+    # R7: findings must be in the structured result. v2: a term that the model
+    # did NOT flag may only appear in a negated sentence ("the model did not flag ...").
     xr = result.get("xray") or {}
-    known = " ".join(xr.get("flagged", []) + xr.get("not_flagged", [])).lower()
-    for term in FINDING_TERMS:
-        if _has_phrase(low_words, term) and term.rstrip("s") not in known:
-            v.append(Violation("R7_finding", f"'{term}' not in the result"))
+    flagged = " ".join(xr.get("flagged", [])).lower()
+    not_flagged = " ".join(xr.get("not_flagged", [])).lower()
+    for sent in re.split(r"[.!?](?=\s|$)", low_words):
+        negated = any(_has_phrase(sent, n) for n in NEGATIONS[lang]) or "n't" in sent \
+            or _has_phrase(sent, "no")
+        hit = None
+        for term in FINDING_TERMS:
+            if not _has_phrase(sent, term):
+                continue
+            stem = term.rstrip("s")
+            if stem in flagged:
+                continue
+            if stem in not_flagged and negated:
+                continue
+            hit = term
+            break
+        if hit:
+            v.append(Violation("R7_finding", f"'{hit}' not flagged in the result"))
             break
     return v
 
@@ -234,5 +254,8 @@ def baseline_check(filled_text: str, result: dict) -> list[str]:
             allowed.update(NUM_RE.findall(o))
 
     walk(result)
+    # v2: the scenario years (keys "y3", "y5", "y7") are legitimate numbers too
+    for block in result.get("scenarios", {}).values():
+        allowed.update(k[1:] for k in block if re.fullmatch(r"y\d+", k))
     return [f"number not in result: {n}" for n in NUM_RE.findall(filled_text)
             if n.replace(",", ".") not in allowed]

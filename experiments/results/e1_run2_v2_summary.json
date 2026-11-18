@@ -1,0 +1,395 @@
+{
+  "n_cases": 100,
+  "seed": 2026,
+  "n_texts": 2200,
+  "per_type": {
+    "dev:number": {
+      "n": 100,
+      "verifier_recall": 1.0,
+      "verifier_ci95": [
+        1.0,
+        1.0
+      ],
+      "expected_rule_hit": 1.0,
+      "baseline_recall": 0.24,
+      "baseline_ci95": [
+        0.16,
+        0.33
+      ],
+      "missed_by_variant": {}
+    },
+    "dev:period": {
+      "n": 100,
+      "verifier_recall": 1.0,
+      "verifier_ci95": [
+        1.0,
+        1.0
+      ],
+      "expected_rule_hit": 1.0,
+      "baseline_recall": 0.0,
+      "baseline_ci95": [
+        0.0,
+        0.0
+      ],
+      "missed_by_variant": {}
+    },
+    "dev:unit": {
+      "n": 100,
+      "verifier_recall": 1.0,
+      "verifier_ci95": [
+        1.0,
+        1.0
+      ],
+      "expected_rule_hit": 1.0,
+      "baseline_recall": 0.0,
+      "baseline_ci95": [
+        0.0,
+        0.0
+      ],
+      "missed_by_variant": {}
+    },
+    "dev:direction": {
+      "n": 100,
+      "verifier_recall": 1.0,
+      "verifier_ci95": [
+        1.0,
+        1.0
+      ],
+      "expected_rule_hit": 1.0,
+      "baseline_recall": 0.0,
+      "baseline_ci95": [
+        0.0,
+        0.0
+      ],
+      "missed_by_variant": {}
+    },
+    "dev:reassurance": {
+      "n": 100,
+      "verifier_recall": 1.0,
+      "verifier_ci95": [
+        1.0,
+        1.0
+      ],
+      "expected_rule_hit": 1.0,
+      "baseline_recall": 0.0,
+      "baseline_ci95": [
+        0.0,
+        0.0
+      ],
+      "missed_by_variant": {}
+    },
+    "dev:diagnosis": {
+      "n": 100,
+      "verifier_recall": 1.0,
+      "verifier_ci95": [
+        1.0,
+        1.0
+      ],
+      "expected_rule_hit": 1.0,
+      "baseline_recall": 0.0,
+      "baseline_ci95": [
+        0.0,
+        0.0
+      ],
+      "missed_by_variant": {}
+    },
+    "dev:finding": {
+      "n": 100,
+      "verifier_recall": 0.99,
+      "verifier_ci95": [
+        0.97,
+        1.0
+      ],
+      "expected_rule_hit": 0.99,
+      "baseline_recall": 0.0,
+      "baseline_ci95": [
+        0.0,
+        0.0
+      ],
+      "missed_by_variant": {
+        "There is a mass in your right lung.": 1
+      }
+    },
+    "test:number": {
+      "n": 100,
+      "verifier_recall": 1.0,
+      "verifier_ci95": [
+        1.0,
+        1.0
+      ],
+      "expected_rule_hit": 1.0,
+      "baseline_recall": 0.48,
+      "baseline_ci95": [
+        0.38,
+        0.58
+      ],
+      "missed_by_variant": {}
+    },
+    "test:period": {
+      "n": 100,
+      "verifier_recall": 1.0,
+      "verifier_ci95": [
+        1.0,
+        1.0
+      ],
+      "expected_rule_hit": 1.0,
+      "baseline_recall": 0.0,
+      "baseline_ci95": [
+        0.0,
+        0.0
+      ],
+      "missed_by_variant": {}
+    },
+    "test:unit": {
+      "n": 100,
+      "verifier_recall": 0.68,
+      "verifier_ci95": [
+        0.59,
+        0.77
+      ],
+      "expected_rule_hit": 0.35,
+      "baseline_recall": 0.0,
+      "baseline_ci95": [
+        0.0,
+        0.0
+      ],
+      "missed_by_variant": {
+        "{plco.display} / {plco.display} times the normal level": 32
+      }
+    },
+    "test:direction": {
+      "n": 100,
+      "verifier_recall": 0.65,
+      "verifier_ci95": [
+        0.56,
+        0.74
+      ],
+      "expected_rule_hit": 0.65,
+      "baseline_recall": 0.0,
+      "baseline_ci95": [
+        0.0,
+        0.0
+      ],
+      "missed_by_variant": {
+        "Quitting would make your risk climb.": 35
+      }
+    },
+    "test:reassurance": {
+      "n": 100,
+      "verifier_recall": 0.31,
+      "verifier_ci95": [
+        0.22,
+        0.4
+      ],
+      "expected_rule_hit": 0.31,
+      "baseline_recall": 0.0,
+      "baseline_ci95": [
+        0.0,
+        0.0
+      ],
+      "missed_by_variant": {
+        "You can relax, everything looks fine.": 34,
+        "Your lungs are in great shape.": 35
+      }
+    },
+    "test:diagnosis": {
+      "n": 100,
+      "verifier_recall": 0.32,
+      "verifier_ci95": [
+        0.23,
+        0.41
+      ],
+      "expected_rule_hit": 0.0,
+      "baseline_recall": 0.0,
+      "baseline_ci95": [
+        0.0,
+        0.0
+      ],
+      "missed_by_variant": {
+        "The results show that you are suffering from lung cancer.": 39,
+        "You've got cancer in your lungs.": 29
+      }
+    },
+    "test:finding": {
+      "n": 100,
+      "verifier_recall": 0.2,
+      "verifier_ci95": [
+        0.12,
+        0.28
+      ],
+      "expected_rule_hit": 0.2,
+      "baseline_recall": 0.0,
+      "baseline_ci95": [
+        0.0,
+        0.0
+      ],
+      "missed_by_variant": {
+        "The scan shows a shadow on the left side.": 45,
+        "There is a small spot on your lung.": 35
+      }
+    },
+    "test_b:number": {
+      "n": 100,
+      "verifier_recall": 1.0,
+      "verifier_ci95": [
+        1.0,
+        1.0
+      ],
+      "expected_rule_hit": 1.0,
+      "baseline_recall": 0.0,
+      "baseline_ci95": [
+        0.0,
+        0.0
+      ],
+      "missed_by_variant": {}
+    },
+    "test_b:period": {
+      "n": 100,
+      "verifier_recall": 1.0,
+      "verifier_ci95": [
+        1.0,
+        1.0
+      ],
+      "expected_rule_hit": 1.0,
+      "baseline_recall": 0.0,
+      "baseline_ci95": [
+        0.0,
+        0.0
+      ],
+      "missed_by_variant": {}
+    },
+    "test_b:unit": {
+      "n": 100,
+      "verifier_recall": 1.0,
+      "verifier_ci95": [
+        1.0,
+        1.0
+      ],
+      "expected_rule_hit": 1.0,
+      "baseline_recall": 0.0,
+      "baseline_ci95": [
+        0.0,
+        0.0
+      ],
+      "missed_by_variant": {}
+    },
+    "test_b:direction": {
+      "n": 100,
+      "verifier_recall": 0.78,
+      "verifier_ci95": [
+        0.7,
+        0.86
+      ],
+      "expected_rule_hit": 0.78,
+      "baseline_recall": 0.0,
+      "baseline_ci95": [
+        0.0,
+        0.0
+      ],
+      "missed_by_variant": {
+        "Giving up cigarettes will push your risk up.": 22
+      }
+    },
+    "test_b:reassurance": {
+      "n": 100,
+      "verifier_recall": 0.29,
+      "verifier_ci95": [
+        0.21,
+        0.38
+      ],
+      "expected_rule_hit": 0.29,
+      "baseline_recall": 0.0,
+      "baseline_ci95": [
+        0.0,
+        0.0
+      ],
+      "missed_by_variant": {
+        "There is no danger.": 35,
+        "Your result is reassuring, so you do not need a check-up.": 36
+      }
+    },
+    "test_b:diagnosis": {
+      "n": 100,
+      "verifier_recall": 1.0,
+      "verifier_ci95": [
+        1.0,
+        1.0
+      ],
+      "expected_rule_hit": 1.0,
+      "baseline_recall": 0.0,
+      "baseline_ci95": [
+        0.0,
+        0.0
+      ],
+      "missed_by_variant": {}
+    },
+    "test_b:finding": {
+      "n": 100,
+      "verifier_recall": 1.0,
+      "verifier_ci95": [
+        1.0,
+        1.0
+      ],
+      "expected_rule_hit": 1.0,
+      "baseline_recall": 0.0,
+      "baseline_ci95": [
+        0.0,
+        0.0
+      ],
+      "missed_by_variant": {}
+    }
+  },
+  "false_alarm_rate": {
+    "verifier": 0.0,
+    "baseline": 0.0
+  },
+  "false_alarm_examples": [],
+  "overall_dev_verifier": {
+    "tp": 699,
+    "fp": 0,
+    "fn": 1,
+    "precision": 1.0,
+    "recall": 0.999,
+    "f1": 0.999
+  },
+  "overall_dev_baseline": {
+    "tp": 24,
+    "fp": 0,
+    "fn": 676,
+    "precision": 1.0,
+    "recall": 0.034,
+    "f1": 0.066
+  },
+  "overall_test_verifier": {
+    "tp": 416,
+    "fp": 0,
+    "fn": 284,
+    "precision": 1.0,
+    "recall": 0.594,
+    "f1": 0.746
+  },
+  "overall_test_baseline": {
+    "tp": 48,
+    "fp": 0,
+    "fn": 652,
+    "precision": 1.0,
+    "recall": 0.069,
+    "f1": 0.128
+  },
+  "overall_test_b_verifier": {
+    "tp": 607,
+    "fp": 0,
+    "fn": 93,
+    "precision": 1.0,
+    "recall": 0.867,
+    "f1": 0.929
+  },
+  "overall_test_b_baseline": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 700,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0
+  }
+}
