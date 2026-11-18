@@ -1,0 +1,34 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install dependencies
+        run: pip install -r requirements-dev.txt
+      - name: Unit and integration tests
+        run: python -m pytest -p no:warnings
+      - name: Small verifier experiment (E1, 20 fictional cases)
+        run: python -m experiments.e1_verifier --n 20 --seed 1
+
+  docker:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build image
+        run: docker build -t lung-quit-coach .
+      - name: Smoke test the container
+        run: |
+          docker run -d -p 8000:8000 --name api lung-quit-coach
+          for i in $(seq 1 20); do curl -fs http://localhost:8000/health && break; sleep 1; done
+          curl -fs -X POST http://localhost:8000/risk -H "Content-Type: application/json" \
+            -d '{"age":62,"education":4,"bmi":27,"smoking_status":"former","cigs_per_day":80,"smoking_years":27,"quit_years":10}'

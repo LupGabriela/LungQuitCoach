@@ -1,0 +1,12 @@
+# Local or server deployment. On a server, put a reverse proxy with HTTPS
+# (for example Caddy) in front of port 8000.
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - LLM_BACKEND=${LLM_BACKEND:-template}   # set to "ollama" to use a local model
+      - OLLAMA_HOST=${OLLAMA_HOST:-http://host.docker.internal:11434}
+      - OLLAMA_MODEL=${OLLAMA_MODEL:-qwen3:4b}
+    restart: unless-stopped
