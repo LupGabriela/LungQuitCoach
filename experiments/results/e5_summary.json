@@ -1,0 +1,24 @@
+{
+  "n_cases": 100,
+  "core_pipeline": {
+    "median_ms": 0.344,
+    "p95_ms": 0.406,
+    "n": 100
+  },
+  "api_round_trip": {
+    "median_ms": 3.937,
+    "p95_ms": 5.931,
+    "n": 100
+  },
+  "peak_python_memory_mb": 55.41,
+  "template_passes_verifier": "100/100",
+  "template_readability_en": {
+    "flesch_kincaid_grade_median": 3.7,
+    "flesch_kincaid_grade_range": [
+      3.1,
+      4.8
+    ],
+    "flesch_reading_ease_median": 83.9,
+    "words_median": 61
+  }
+}
