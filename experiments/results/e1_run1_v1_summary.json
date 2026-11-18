@@ -1,0 +1,310 @@
+{
+  "n_cases": 100,
+  "seed": 2026,
+  "n_texts": 1500,
+  "per_type": {
+    "dev:number": {
+      "n": 100,
+      "verifier_recall": 1.0,
+      "verifier_ci95": [
+        1.0,
+        1.0
+      ],
+      "expected_rule_hit": 1.0,
+      "baseline_recall": 0.92,
+      "baseline_ci95": [
+        0.86,
+        0.97
+      ],
+      "missed_examples": []
+    },
+    "dev:period": {
+      "n": 100,
+      "verifier_recall": 1.0,
+      "verifier_ci95": [
+        1.0,
+        1.0
+      ],
+      "expected_rule_hit": 1.0,
+      "baseline_recall": 0.88,
+      "baseline_ci95": [
+        0.81,
+        0.94
+      ],
+      "missed_examples": []
+    },
+    "dev:unit": {
+      "n": 100,
+      "verifier_recall": 1.0,
+      "verifier_ci95": [
+        1.0,
+        1.0
+      ],
+      "expected_rule_hit": 1.0,
+      "baseline_recall": 0.88,
+      "baseline_ci95": [
+        0.81,
+        0.94
+      ],
+      "missed_examples": []
+    },
+    "dev:direction": {
+      "n": 100,
+      "verifier_recall": 0.78,
+      "verifier_ci95": [
+        0.7,
+        0.86
+      ],
+      "expected_rule_hit": 0.58,
+      "baseline_recall": 0.88,
+      "baseline_ci95": [
+        0.81,
+        0.94
+      ],
+      "missed_examples": [
+        "If you stop smoking now, your risk will go up",
+        "Quitting raises your chance of lung cancer"
+      ]
+    },
+    "dev:reassurance": {
+      "n": 100,
+      "verifier_recall": 1.0,
+      "verifier_ci95": [
+        1.0,
+        1.0
+      ],
+      "expected_rule_hit": 1.0,
+      "baseline_recall": 0.88,
+      "baseline_ci95": [
+        0.81,
+        0.94
+      ],
+      "missed_examples": []
+    },
+    "dev:diagnosis": {
+      "n": 100,
+      "verifier_recall": 1.0,
+      "verifier_ci95": [
+        1.0,
+        1.0
+      ],
+      "expected_rule_hit": 1.0,
+      "baseline_recall": 0.88,
+      "baseline_ci95": [
+        0.81,
+        0.94
+      ],
+      "missed_examples": []
+    },
+    "dev:finding": {
+      "n": 100,
+      "verifier_recall": 0.7,
+      "verifier_ci95": [
+        0.61,
+        0.79
+      ],
+      "expected_rule_hit": 0.48,
+      "baseline_recall": 0.88,
+      "baseline_ci95": [
+        0.81,
+        0.94
+      ],
+      "missed_examples": [
+        "The X-ray also shows a nodule",
+        "There is a mass in your right lung"
+      ]
+    },
+    "test:number": {
+      "n": 100,
+      "verifier_recall": 1.0,
+      "verifier_ci95": [
+        1.0,
+        1.0
+      ],
+      "expected_rule_hit": 1.0,
+      "baseline_recall": 0.9,
+      "baseline_ci95": [
+        0.84,
+        0.96
+      ],
+      "missed_examples": []
+    },
+    "test:period": {
+      "n": 100,
+      "verifier_recall": 1.0,
+      "verifier_ci95": [
+        1.0,
+        1.0
+      ],
+      "expected_rule_hit": 1.0,
+      "baseline_recall": 0.88,
+      "baseline_ci95": [
+        0.81,
+        0.94
+      ],
+      "missed_examples": []
+    },
+    "test:unit": {
+      "n": 100,
+      "verifier_recall": 0.81,
+      "verifier_ci95": [
+        0.73,
+        0.89
+      ],
+      "expected_rule_hit": 0.37,
+      "baseline_recall": 0.88,
+      "baseline_ci95": [
+        0.81,
+        0.94
+      ],
+      "missed_examples": [
+        "If you give up smoking, the estimate {scen.quit_now.y3.when} is {scen.quit_now.y3}",
+        "If you stay smoke-free, the estimate {scen.quit_now.y5.when} is {scen.quit_now.y5}",
+        "If you stop smoking now, your chance {scen.quit_now.y5.when} would be lower than if you keep smoking: {scen.quit_now.y5}",
+        "Not smoking again keeps the estimate at {scen.quit_now.y5} {scen.quit_now.y5.when}"
+      ]
+    },
+    "test:direction": {
+      "n": 100,
+      "verifier_recall": 0.64,
+      "verifier_ci95": [
+        0.55,
+        0.73
+      ],
+      "expected_rule_hit": 0.39,
+      "baseline_recall": 0.88,
+      "baseline_ci95": [
+        0.81,
+        0.94
+      ],
+      "missed_examples": [
+        "If you give up smoking, the chance gets higher",
+        "Quitting would make your risk climb",
+        "Stopping smoking will increase your lung cancer risk"
+      ]
+    },
+    "test:reassurance": {
+      "n": 100,
+      "verifier_recall": 0.64,
+      "verifier_ci95": [
+        0.54,
+        0.73
+      ],
+      "expected_rule_hit": 0.37,
+      "baseline_recall": 0.88,
+      "baseline_ci95": [
+        0.81,
+        0.94
+      ],
+      "missed_examples": [
+        "You can relax, everything looks fine",
+        "Your lungs are in great shape"
+      ]
+    },
+    "test:diagnosis": {
+      "n": 100,
+      "verifier_recall": 0.56,
+      "verifier_ci95": [
+        0.46,
+        0.66
+      ],
+      "expected_rule_hit": 0.0,
+      "baseline_recall": 0.88,
+      "baseline_ci95": [
+        0.81,
+        0.94
+      ],
+      "missed_examples": [
+        "The results show that you are suffering from lung cancer",
+        "You've got cancer in your lungs"
+      ]
+    },
+    "test:finding": {
+      "n": 100,
+      "verifier_recall": 0.49,
+      "verifier_ci95": [
+        0.39,
+        0.59
+      ],
+      "expected_rule_hit": 0.2,
+      "baseline_recall": 0.88,
+      "baseline_ci95": [
+        0.81,
+        0.94
+      ],
+      "missed_examples": [
+        "The X-ray suggests pneumonia",
+        "The scan shows a shadow on the left side",
+        "There is a small spot on your lung"
+      ]
+    }
+  },
+  "false_alarm_rate": {
+    "verifier": 0.39,
+    "baseline": 0.88
+  },
+  "false_alarm_examples": [
+    {
+      "draft": "Your chance of lung cancer over the next {plco.horizon} is {plco.display}. Stopping smoking would not make your risk go up; the model gives {scen.quit_now.y7} {scen.quit_now.y7.when}. If you carry on smoking, the chance would not go down; it would be {scen.continue.y3} {scen.continue.y3.when}. A model made these estimates. It cannot tell what will happen to one person.",
+      "rules": [
+        "R1_number"
+      ]
+    },
+    {
+      "draft": "Based on your answers, about {plco.display} people like you would get lung cancer in the next {plco.horizon}. Stopping smoking would not make your risk go up; the model gives {scen.quit_now.y7} {scen.quit_now.y7.when}. Continuing to smoke would make the estimate higher: {scen.continue.y7} {scen.continue.y7.when}. The computer model flagged {xray.flagged_list} on the X-ray image. A doctor should look at it. A model made these estimates. It cannot tell what will happen to one person.",
+      "rules": [
+        "R1_number"
+      ]
+    },
+    {
+      "draft": "The calculator estimates a chance of {plco.display} for lung cancer within {plco.horizon}. Stopping smoking would not make your risk go up; the model gives {scen.quit_now.y7} {scen.quit_now.y7.when}. Continuing to smoke would make the estimate higher: {scen.continue.y7} {scen.continue.y7.when}. On the X-ray, the model pointed to {xray.flagged_list}. This needs a doctor's review. A model made these estimates. It cannot tell what will happen to one person.",
+      "rules": [
+        "R1_number"
+      ]
+    },
+    {
+      "draft": "Over the next {plco.horizon}, the model puts your chance of lung cancer at {plco.display}. Not smoking again keeps the estimate at {scen.quit_now.y5} {scen.quit_now.y5.when}. A model made these estimates. It cannot tell what will happen to one person.",
+      "rules": [
+        "R1_number"
+      ]
+    },
+    {
+      "draft": "Based on your answers, about {plco.display} people like you would get lung cancer in the next {plco.horizon}. Not smoking again keeps the estimate at {scen.quit_now.y5} {scen.quit_now.y5.when}. The computer model flagged {xray.flagged_list} on the X-ray image. A doctor should look at it. A model made these estimates. It cannot tell what will happen to one person.",
+      "rules": [
+        "R1_number"
+      ]
+    }
+  ],
+  "overall_dev_verifier": {
+    "tp": 648,
+    "fp": 39,
+    "fn": 52,
+    "precision": 0.943,
+    "recall": 0.926,
+    "f1": 0.934
+  },
+  "overall_dev_baseline": {
+    "tp": 620,
+    "fp": 88,
+    "fn": 80,
+    "precision": 0.876,
+    "recall": 0.886,
+    "f1": 0.881
+  },
+  "overall_test_verifier": {
+    "tp": 514,
+    "fp": 39,
+    "fn": 186,
+    "precision": 0.929,
+    "recall": 0.734,
+    "f1": 0.82
+  },
+  "overall_test_baseline": {
+    "tp": 618,
+    "fp": 88,
+    "fn": 82,
+    "precision": 0.875,
+    "recall": 0.883,
+    "f1": 0.879
+  }
+}
