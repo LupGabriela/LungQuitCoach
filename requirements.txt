@@ -1,0 +1,6 @@
+# Core app (no deep learning needed): risk model, scenarios, verifier, API
+fastapi==0.164.0
+uvicorn==0.54.0
+pydantic==2.14.3
+python-multipart==0.0.34
+numpy==2.5.5

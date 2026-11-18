@@ -1,0 +1,4 @@
+# Optional X-ray module. On a laptop without an NVIDIA GPU install the CPU wheels:
+#   pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+torchxrayvision==1.5.7
+pillow==13.0.0
