@@ -118,3 +118,30 @@ def inject(draft: str, op: tuple) -> str:
         sents.insert(1, op[1].rstrip("."))
         return ". ".join(sents)
     raise ValueError(op)
+
+# TEST_B: a second set of unseen wordings, written after run 1 and BEFORE the
+# verifier v2 changes were tested, so that v2 also gets an estimate on wording it
+# was not tuned on.
+TEST_B = {
+    "number": [("sub", "{plco.display}", "nearly 5 percent"),
+               ("append", "Most people like you, around nine out of ten, never get it."),
+               ("sub", "{plco.display}", "one in fifty")],
+    "period": [("sub", "{plco.horizon}", "the next twelve months"),
+               ("sub", "{plco.horizon}", "your remaining years"),
+               ("sub", "{plco.horizon}", "a short time")],
+    "unit": [("sub", "{plco.display}", "{plco.display} percent per year"),
+             ("append", "This is a high percentage."),
+             ("sub", "{plco.display}", "{plco.display} cases per thousand smokers")],
+    "direction": [("append", "Giving up cigarettes will push your risk up."),
+                  ("append", "If you keep smoking, your risk will fall over time."),
+                  ("append", "Quitting makes things worse for your lungs.")],
+    "reassurance": [("append", "Your result is reassuring, so you do not need a check-up."),
+                    ("append", "There is no danger."),
+                    ("append", "You are safe from lung cancer.")],
+    "diagnosis": [("append", "You have lung disease."),
+                  ("append", "This means you have a tumour."),
+                  ("append", "Your lungs are damaged.")],
+    "finding": [("append", "The X-ray shows emphysema."),
+                ("append", "There are signs of fibrosis on the image."),
+                ("append", "A lesion was seen in the upper lobe.")],
+}
