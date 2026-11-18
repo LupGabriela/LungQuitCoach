@@ -91,6 +91,8 @@ DIAGNOSIS_RE = {
            r"\bdiagnosticat\w*\b"],
 }
 
+SINGULAR = {"nodules": "nodule", "masses": "mass", "lesions": "lesion", "opacities": "opacity",
+            "tumour": "tumor", "oedema": "edema"}
 FINDING_TERMS = ["nodule", "nodules", "mass", "masses", "tumour", "tumor", "emphysema",
                  "fibrosis", "pneumonia", "effusion", "pneumothorax", "cardiomegaly",
                  "atelectasis", "consolidation", "edema", "oedema", "infiltration", "hernia",
@@ -212,10 +214,10 @@ def verify(draft: str, result: dict) -> list[Violation]:
         for term in FINDING_TERMS:
             if not _has_phrase(sent, term):
                 continue
-            stem = term.rstrip("s")
-            if stem in flagged:
+            stem = SINGULAR.get(term, term)
+            if _has_phrase(flagged, stem):
                 continue
-            if stem in not_flagged and negated:
+            if _has_phrase(not_flagged, stem) and negated:
                 continue
             hit = term
             break

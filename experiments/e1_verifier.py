@@ -103,14 +103,14 @@ def main(n: int, seed: int) -> dict:
                                                  "precision": round(prec, 3),
                                                  "recall": round(rec, 3), "f1": round(f1, 3)}
     OUT.mkdir(exist_ok=True)
-    with open(OUT / "e1_run2_v2_texts.csv", "w", newline="", encoding="utf-8") as f:
+    with open(OUT / "e1_run3_v21_texts.csv", "w", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
         w.writerow(["case", "split", "error_type", "injected", "verifier_flag", "verifier_rules",
                     "baseline_flag", "draft"])
         for r in rows:
             w.writerow([r["case"], r["split"], r["error_type"], r["op"], r["verifier_flag"],
                         "|".join(r["verifier_rules"]), r["baseline_flag"], r["draft"]])
-    (OUT / "e1_run2_v2_summary.json").write_text(json.dumps(summary, indent=2), encoding="utf-8")
+    (OUT / "e1_run3_v21_summary.json").write_text(json.dumps(summary, indent=2), encoding="utf-8")
     return summary
 
 

@@ -101,3 +101,11 @@ def test_romanian_rules():
     assert verify(template_draft(res), res) == []
     assert "R5_reassurance" in rules("Sunteți în siguranță.", res)
     assert "R1_number" in rules("Riscul este de doi la sută în {plco.horizon}.", res)
+
+
+def test_mass_not_allowed_by_edema(result):
+    # regression: 'mass' used to be reduced to 'ma', which matched 'edema'
+    q = Questionnaire(age=60, education=3, bmi=26, smoking_status="current", cigs_per_day=20,
+                      smoking_years=40)
+    res = build_result(q, XrayInfo(provided=True, flagged=["Edema"], not_flagged=["Mass"]))
+    assert "R7_finding" in rules("There is a mass in your right lung.", res)
