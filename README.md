@@ -21,7 +21,7 @@ fictional cases and public, de-identified images.
 ```bash
 python -m venv .venv && source .venv/bin/activate      # Windows PowerShell: .venv\Scripts\Activate.ps1
 pip install -r requirements-dev.txt
-python -m pytest                                         # 44 tests
+python -m pytest                                         # 56 tests
 uvicorn app.main:app --reload                            # open http://localhost:8000/docs
 ```
 
@@ -38,13 +38,14 @@ Optional local LLM: install Ollama, run `ollama pull qwen3:4b`, then start the A
 ## Experiments (case study)
 
 ```bash
-python -m experiments.e1_verifier --n 100 --seed 2026 --tag run3_v21  # verifier vs baseline
+python -m experiments.e1_verifier --n 100 --seed 2026 --tag run4b_v3  # verifier vs baseline
 python -m experiments.e4_xray_robustness IMG1.png IMG2.png # score change under 18 degradations
 python -m experiments.e5_timing --n 100                    # run time + template readability
 ```
 
-Results are written to `experiments/results/`. E1 runs 1–3 are kept on purpose: run 1 used
-verifier v1, runs 2–3 used v2 / v2.1 (see the git log for what changed and why).
+Results are written to `experiments/results/`. All E1 runs are kept on purpose: run 1 used
+verifier v1, runs 2–3 v2 / v2.1, run 4a v2.1 on the new unseen sets (test_c, correct_b), and
+run 4b verifier v3 (see the git log for what changed and why).
 
 The two X-ray images used in E4 are NIH ChestX-ray14 images shipped in the TorchXRayVision
 repository's `tests/` folder (`00000001_000.png`, `00027426_000.png`). Copy them into
