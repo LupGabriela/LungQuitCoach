@@ -78,3 +78,11 @@ Docker image and smoke-tests the container.
 - TorchXRayVision: Apache-2.0 (main library; model weights have their own terms).
 - BodyParts3D (planned 3D lung model): CC BY 4.0, credit "BodyParts3D, © The Database Center for
   Life Science licensed under CC Attribution 4.0 International".
+
+## AI assistance
+
+This project was developed with the help of Claude, an AI assistant made by Anthropic. It was used
+to write and test code, run the experiments, check sources and draft the Lab 5–8 report, under my
+direction. All experiment numbers in the report come from the code and result files in this
+repository, and every source was checked against an official or primary page (see
+`docs/source-check/`).
