@@ -15,8 +15,10 @@ thesis error taxonomy:
   R7 finding            X-ray finding that is not in the structured result
 
 Known limits (reported in the thesis): synonyms that are not in the lists are
-missed; negation is handled only by the direction and finding rules; meaning
-errors that use none of the listed words are not caught.
+missed; negation is handled by the direction, reassurance and finding rules
+only; meaning errors that use none of the listed words are not caught.
+
+Version history: v1 (E1 run 1), v2 / v2.1 (runs 2-4a), v3 (run 4b): see git log.
 """
 from __future__ import annotations
 
@@ -34,9 +36,9 @@ NUMBER_WORDS = {
            "seventeen", "eighteen", "nineteen", "twenty", "thirty", "forty", "fifty",
            "sixty", "seventy", "eighty", "ninety", "hundred", "thousand", "million",
            "half", "twice", "double", "triple", "quarter", "third"],
-    "ro": ["zero", "unu", "una", "doi", "două", "trei", "patru", "cinci", "șase", "sase",
+    "ro": ["zero", "unu", "doi", "două", "trei", "patru", "cinci", "șase", "sase",
            "șapte", "sapte", "opt", "nouă", "noua", "zece", "douăzeci", "sută", "suta",
-           "sute", "mie", "mii", "jumătate", "jumatate", "dublu", "triplu", "sfert"],
+           "sute", "o mie", "mii", "jumătate", "jumatate", "dublu", "triplu", "sfert"],
 }
 # v2: "one" is common in normal English ("one person", "no one"), so it counts as
 # a number only when used as a quantity ("one in fifty", "one out of", "one percent").
@@ -73,20 +75,32 @@ SCENARIO_CUES = {
                  "ro": ["fumezi mai mult", "scen.increase"]},
 }
 
-REASSURANCE = {
-    "en": ["safe", "no risk", "zero risk", "risk-free", "nothing to worry", "no need to worry",
-           "you are fine", "you're fine", "guaranteed", "will not get", "won't get",
-           "perfectly healthy", "all clear"],
-    "ro": ["în siguranță", "fără risc", "niciun risc", "nu aveți de ce", "nu ai de ce",
-           "sigur nu", "garantat"],
+# v3: phrases that are reassuring on their own (they already contain a negation)
+REASSURANCE_FIXED = {
+    "en": ["no risk", "zero risk", "risk-free", "nothing to worry", "no need to worry"],
+    "ro": ["fără risc", "niciun risc", "nu aveți de ce", "nu ai de ce", "sigur nu",
+           "niciun pericol", "nu există pericol"],
 }
+# v3: words that reassure unless negated in the same clause ("not safe" is fine)
+REASSURANCE_NEGATABLE = {
+    "en": ["safe", "you are fine", "you're fine", "guaranteed", "perfectly healthy", "all clear"],
+    "ro": ["în siguranță", "garantat"],
+}
+REASSURANCE_RE = {
+    "en": [r"\b(?:will not|won't|will never) get (?:lung )?cancer\b"],
+    "ro": [r"\bîn afara (?:oricărui )?pericol\w*"],
+}
+NEGATION_RE = {"en": re.compile(r"\b(?:not|never|cannot|no longer)\b|n't\b"),
+               "ro": re.compile(r"\b(?:nu|niciodată)\b")}
 
 DIAGNOSIS_RE = {
-    "en": [r"\byou (?:have|'ve got|have got|do not have|don't have|are free of)\b[^.;]*?"
-           r"\b(?:cancer|tumou?r|disease|copd|emphysema)\b",
+    # v3: at most two words between the verb and the disease word
+    "en": [r"\byou(?: have|'ve got| have got| do not have| don't have| are free of)"
+           r"(?:\s+[\w'-]+){0,2}?\s+(?:cancer|tumou?r|disease|copd|emphysema)\b",
            r"\bdiagnosed with\b", r"\byou are diagnosed\b", r"\bcancer-free\b",
            r"\byour lungs are (?:healthy|damaged|diseased)\b"],
-    "ro": [r"\b(?:ai|aveți|aveti|nu ai|nu aveți)\b[^.;]*?\b(?:cancer|tumoră|tumora|boală|boala)\b",
+    # v3: inflected forms (cancerul, tumoare, bolii ...)
+    "ro": [r"\b(?:ai|aveți|aveti)(?:\s+\S+){0,2}?\s+(?:cancer\w*|tumor\w*|tumoar\w*|boal\w*|boli\w*)",
            r"\bdiagnosticat\w*\b"],
 }
 
@@ -168,7 +182,9 @@ def verify(draft: str, result: dict) -> list[Violation]:
     for clause in _clauses(low):
         positions = {}
         for scen, cues in SCENARIO_CUES.items():
-            hits = [clause.find(c) for c in cues[lang] if c in clause]
+            # v3: whole words only ("quite" is not "quit")
+            hits = [m.start() for c in cues[lang]
+                    for m in [re.search(r"(?<![\w-])" + re.escape(c) + r"(?![\w-])", clause)] if m]
             if hits:
                 positions[scen] = min(hits)
         if not positions:
@@ -188,10 +204,27 @@ def verify(draft: str, result: dict) -> list[Violation]:
             break
 
     # R5: false reassurance
-    for ph in REASSURANCE[lang]:
+    r5 = None
+    for ph in REASSURANCE_FIXED[lang]:
         if _has_phrase(low_words, ph):
-            v.append(Violation("R5_reassurance", f"'{ph}'"))
+            r5 = ph
             break
+    if r5 is None:
+        for pat in REASSURANCE_RE[lang]:
+            if re.search(pat, low_words):
+                r5 = pat
+                break
+    if r5 is None:
+        for clause in _clauses(low_words):
+            for ph in REASSURANCE_NEGATABLE[lang]:
+                m = re.search(r"(?<![\w-])" + re.escape(ph) + r"(?![\w-])", clause)
+                if m and not NEGATION_RE[lang].search(clause[:m.start()]):
+                    r5 = ph
+                    break
+            if r5:
+                break
+    if r5:
+        v.append(Violation("R5_reassurance", f"'{r5}'"))
 
     # R6: diagnosis-like statements
     for pat in DIAGNOSIS_RE[lang]:

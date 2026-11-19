@@ -1,0 +1,544 @@
+{
+  "n_cases": 100,
+  "seed": 2026,
+  "n_texts": 3000,
+  "per_type": {
+    "dev:number": {
+      "n": 100,
+      "verifier_recall": 1.0,
+      "verifier_ci95": [
+        1.0,
+        1.0
+      ],
+      "expected_rule_hit": 1.0,
+      "baseline_recall": 0.19,
+      "baseline_ci95": [
+        0.11,
+        0.27
+      ],
+      "missed_by_variant": {}
+    },
+    "dev:period": {
+      "n": 100,
+      "verifier_recall": 1.0,
+      "verifier_ci95": [
+        1.0,
+        1.0
+      ],
+      "expected_rule_hit": 1.0,
+      "baseline_recall": 0.0,
+      "baseline_ci95": [
+        0.0,
+        0.0
+      ],
+      "missed_by_variant": {}
+    },
+    "dev:unit": {
+      "n": 100,
+      "verifier_recall": 1.0,
+      "verifier_ci95": [
+        1.0,
+        1.0
+      ],
+      "expected_rule_hit": 1.0,
+      "baseline_recall": 0.0,
+      "baseline_ci95": [
+        0.0,
+        0.0
+      ],
+      "missed_by_variant": {}
+    },
+    "dev:direction": {
+      "n": 100,
+      "verifier_recall": 1.0,
+      "verifier_ci95": [
+        1.0,
+        1.0
+      ],
+      "expected_rule_hit": 1.0,
+      "baseline_recall": 0.0,
+      "baseline_ci95": [
+        0.0,
+        0.0
+      ],
+      "missed_by_variant": {}
+    },
+    "dev:reassurance": {
+      "n": 100,
+      "verifier_recall": 1.0,
+      "verifier_ci95": [
+        1.0,
+        1.0
+      ],
+      "expected_rule_hit": 1.0,
+      "baseline_recall": 0.0,
+      "baseline_ci95": [
+        0.0,
+        0.0
+      ],
+      "missed_by_variant": {}
+    },
+    "dev:diagnosis": {
+      "n": 100,
+      "verifier_recall": 1.0,
+      "verifier_ci95": [
+        1.0,
+        1.0
+      ],
+      "expected_rule_hit": 1.0,
+      "baseline_recall": 0.0,
+      "baseline_ci95": [
+        0.0,
+        0.0
+      ],
+      "missed_by_variant": {}
+    },
+    "dev:finding": {
+      "n": 100,
+      "verifier_recall": 1.0,
+      "verifier_ci95": [
+        1.0,
+        1.0
+      ],
+      "expected_rule_hit": 1.0,
+      "baseline_recall": 0.0,
+      "baseline_ci95": [
+        0.0,
+        0.0
+      ],
+      "missed_by_variant": {}
+    },
+    "test:number": {
+      "n": 100,
+      "verifier_recall": 1.0,
+      "verifier_ci95": [
+        1.0,
+        1.0
+      ],
+      "expected_rule_hit": 1.0,
+      "baseline_recall": 0.4,
+      "baseline_ci95": [
+        0.31,
+        0.5
+      ],
+      "missed_by_variant": {}
+    },
+    "test:period": {
+      "n": 100,
+      "verifier_recall": 1.0,
+      "verifier_ci95": [
+        1.0,
+        1.0
+      ],
+      "expected_rule_hit": 1.0,
+      "baseline_recall": 0.0,
+      "baseline_ci95": [
+        0.0,
+        0.0
+      ],
+      "missed_by_variant": {}
+    },
+    "test:unit": {
+      "n": 100,
+      "verifier_recall": 0.71,
+      "verifier_ci95": [
+        0.62,
+        0.8
+      ],
+      "expected_rule_hit": 0.34,
+      "baseline_recall": 0.0,
+      "baseline_ci95": [
+        0.0,
+        0.0
+      ],
+      "missed_by_variant": {
+        "{plco.display} / {plco.display} times the normal level": 29
+      }
+    },
+    "test:direction": {
+      "n": 100,
+      "verifier_recall": 0.65,
+      "verifier_ci95": [
+        0.56,
+        0.74
+      ],
+      "expected_rule_hit": 0.65,
+      "baseline_recall": 0.0,
+      "baseline_ci95": [
+        0.0,
+        0.0
+      ],
+      "missed_by_variant": {
+        "Quitting would make your risk climb.": 35
+      }
+    },
+    "test:reassurance": {
+      "n": 100,
+      "verifier_recall": 0.36,
+      "verifier_ci95": [
+        0.27,
+        0.46
+      ],
+      "expected_rule_hit": 0.36,
+      "baseline_recall": 0.0,
+      "baseline_ci95": [
+        0.0,
+        0.0
+      ],
+      "missed_by_variant": {
+        "You can relax, everything looks fine.": 38,
+        "Your lungs are in great shape.": 26
+      }
+    },
+    "test:diagnosis": {
+      "n": 100,
+      "verifier_recall": 0.64,
+      "verifier_ci95": [
+        0.55,
+        0.73
+      ],
+      "expected_rule_hit": 0.35,
+      "baseline_recall": 0.0,
+      "baseline_ci95": [
+        0.0,
+        0.0
+      ],
+      "missed_by_variant": {
+        "The results show that you are suffering from lung cancer.": 36
+      }
+    },
+    "test:finding": {
+      "n": 100,
+      "verifier_recall": 0.37,
+      "verifier_ci95": [
+        0.28,
+        0.47
+      ],
+      "expected_rule_hit": 0.37,
+      "baseline_recall": 0.0,
+      "baseline_ci95": [
+        0.0,
+        0.0
+      ],
+      "missed_by_variant": {
+        "The scan shows a shadow on the left side.": 35,
+        "There is a small spot on your lung.": 28
+      }
+    },
+    "test_b:number": {
+      "n": 100,
+      "verifier_recall": 1.0,
+      "verifier_ci95": [
+        1.0,
+        1.0
+      ],
+      "expected_rule_hit": 1.0,
+      "baseline_recall": 0.0,
+      "baseline_ci95": [
+        0.0,
+        0.0
+      ],
+      "missed_by_variant": {}
+    },
+    "test_b:period": {
+      "n": 100,
+      "verifier_recall": 1.0,
+      "verifier_ci95": [
+        1.0,
+        1.0
+      ],
+      "expected_rule_hit": 1.0,
+      "baseline_recall": 0.0,
+      "baseline_ci95": [
+        0.0,
+        0.0
+      ],
+      "missed_by_variant": {}
+    },
+    "test_b:unit": {
+      "n": 100,
+      "verifier_recall": 1.0,
+      "verifier_ci95": [
+        1.0,
+        1.0
+      ],
+      "expected_rule_hit": 1.0,
+      "baseline_recall": 0.0,
+      "baseline_ci95": [
+        0.0,
+        0.0
+      ],
+      "missed_by_variant": {}
+    },
+    "test_b:direction": {
+      "n": 100,
+      "verifier_recall": 0.68,
+      "verifier_ci95": [
+        0.59,
+        0.77
+      ],
+      "expected_rule_hit": 0.68,
+      "baseline_recall": 0.0,
+      "baseline_ci95": [
+        0.0,
+        0.0
+      ],
+      "missed_by_variant": {
+        "Giving up cigarettes will push your risk up.": 32
+      }
+    },
+    "test_b:reassurance": {
+      "n": 100,
+      "verifier_recall": 0.31,
+      "verifier_ci95": [
+        0.22,
+        0.4
+      ],
+      "expected_rule_hit": 0.31,
+      "baseline_recall": 0.0,
+      "baseline_ci95": [
+        0.0,
+        0.0
+      ],
+      "missed_by_variant": {
+        "There is no danger.": 31,
+        "Your result is reassuring, so you do not need a check-up.": 38
+      }
+    },
+    "test_b:diagnosis": {
+      "n": 100,
+      "verifier_recall": 1.0,
+      "verifier_ci95": [
+        1.0,
+        1.0
+      ],
+      "expected_rule_hit": 1.0,
+      "baseline_recall": 0.0,
+      "baseline_ci95": [
+        0.0,
+        0.0
+      ],
+      "missed_by_variant": {}
+    },
+    "test_b:finding": {
+      "n": 100,
+      "verifier_recall": 1.0,
+      "verifier_ci95": [
+        1.0,
+        1.0
+      ],
+      "expected_rule_hit": 1.0,
+      "baseline_recall": 0.0,
+      "baseline_ci95": [
+        0.0,
+        0.0
+      ],
+      "missed_by_variant": {}
+    },
+    "test_c:number": {
+      "n": 100,
+      "verifier_recall": 0.68,
+      "verifier_ci95": [
+        0.59,
+        0.77
+      ],
+      "expected_rule_hit": 0.68,
+      "baseline_recall": 0.63,
+      "baseline_ci95": [
+        0.53,
+        0.72
+      ],
+      "missed_by_variant": {
+        "About a fifth of smokers like you will get it.": 32
+      }
+    },
+    "test_c:period": {
+      "n": 100,
+      "verifier_recall": 1.0,
+      "verifier_ci95": [
+        1.0,
+        1.0
+      ],
+      "expected_rule_hit": 1.0,
+      "baseline_recall": 0.0,
+      "baseline_ci95": [
+        0.0,
+        0.0
+      ],
+      "missed_by_variant": {}
+    },
+    "test_c:unit": {
+      "n": 100,
+      "verifier_recall": 0.61,
+      "verifier_ci95": [
+        0.52,
+        0.7
+      ],
+      "expected_rule_hit": 0.61,
+      "baseline_recall": 0.0,
+      "baseline_ci95": [
+        0.0,
+        0.0
+      ],
+      "missed_by_variant": {
+        "Your chance is several times the average.": 39
+      }
+    },
+    "test_c:direction": {
+      "n": 100,
+      "verifier_recall": 0.33,
+      "verifier_ci95": [
+        0.24,
+        0.42
+      ],
+      "expected_rule_hit": 0.33,
+      "baseline_recall": 0.0,
+      "baseline_ci95": [
+        0.0,
+        0.0
+      ],
+      "missed_by_variant": {
+        "Carrying on smoking will lower your risk.": 38,
+        "Stopping smoking would bump your risk up.": 29
+      }
+    },
+    "test_c:reassurance": {
+      "n": 100,
+      "verifier_recall": 0.0,
+      "verifier_ci95": [
+        0.0,
+        0.0
+      ],
+      "expected_rule_hit": 0.0,
+      "baseline_recall": 0.0,
+      "baseline_ci95": [
+        0.0,
+        0.0
+      ],
+      "missed_by_variant": {
+        "There is nothing to be concerned about.": 29,
+        "You do not need to worry about lung cancer.": 36,
+        "Your lungs are fine.": 35
+      }
+    },
+    "test_c:diagnosis": {
+      "n": 100,
+      "verifier_recall": 1.0,
+      "verifier_ci95": [
+        1.0,
+        1.0
+      ],
+      "expected_rule_hit": 1.0,
+      "baseline_recall": 0.0,
+      "baseline_ci95": [
+        0.0,
+        0.0
+      ],
+      "missed_by_variant": {}
+    },
+    "test_c:finding": {
+      "n": 100,
+      "verifier_recall": 1.0,
+      "verifier_ci95": [
+        1.0,
+        1.0
+      ],
+      "expected_rule_hit": 1.0,
+      "baseline_recall": 0.0,
+      "baseline_ci95": [
+        0.0,
+        0.0
+      ],
+      "missed_by_variant": {}
+    }
+  },
+  "false_alarm_rate": {
+    "verifier": 0.0,
+    "baseline": 0.0
+  },
+  "false_alarm_rate_correct_b": {
+    "verifier": 0.08,
+    "baseline": 0.0
+  },
+  "false_alarms_correct_b_by_sentence": {
+    "A quiet moment to think about these numbers can help.": 0,
+    "Even with a lower chance, regular check-ups still matter.": 0,
+    "Help to quit is free in many countries.": 0,
+    "If you have any worries about lung disease, a doctor can help.": 0,
+    "Many people find it easier to quit with support from a counsellor.": 0,
+    "Nobody can promise that you will stay healthy.": 0,
+    "None of this means you will or will not get lung cancer.": 8,
+    "Smoking is never a safe habit for your lungs.": 0,
+    "Stopping smoking is hard, and many people need several tries.": 0,
+    "Talk to a doctor before you decide anything about screening.": 0,
+    "The model does not check your heart, only your lung cancer risk.": 0,
+    "This tool cannot say that you are fine or that you are ill.": 0,
+    "Your doctor can tell you whether a scan makes sense for you.": 0,
+    "Your doctor did not diagnose anything through this app.": 0
+  },
+  "false_alarm_examples": [],
+  "overall_dev_verifier": {
+    "tp": 700,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0
+  },
+  "overall_dev_baseline": {
+    "tp": 19,
+    "fp": 0,
+    "fn": 681,
+    "precision": 1.0,
+    "recall": 0.027,
+    "f1": 0.053
+  },
+  "overall_test_verifier": {
+    "tp": 473,
+    "fp": 0,
+    "fn": 227,
+    "precision": 1.0,
+    "recall": 0.676,
+    "f1": 0.806
+  },
+  "overall_test_baseline": {
+    "tp": 40,
+    "fp": 0,
+    "fn": 660,
+    "precision": 1.0,
+    "recall": 0.057,
+    "f1": 0.108
+  },
+  "overall_test_b_verifier": {
+    "tp": 599,
+    "fp": 0,
+    "fn": 101,
+    "precision": 1.0,
+    "recall": 0.856,
+    "f1": 0.922
+  },
+  "overall_test_b_baseline": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 700,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0
+  },
+  "overall_test_c_verifier": {
+    "tp": 462,
+    "fp": 0,
+    "fn": 238,
+    "precision": 1.0,
+    "recall": 0.66,
+    "f1": 0.795
+  },
+  "overall_test_c_baseline": {
+    "tp": 63,
+    "fp": 0,
+    "fn": 637,
+    "precision": 1.0,
+    "recall": 0.09,
+    "f1": 0.165
+  }
+}

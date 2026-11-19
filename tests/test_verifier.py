@@ -143,3 +143,36 @@ def test_ollama_request_disables_thinking_and_fixes_seed(monkeypatch):
     monkeypatch.setattr(urllib.request, "urlopen", fake_urlopen)
     assert OllamaLLM(temperature=0.2, seed=7).generate("hi") == "ok"
     assert sent["think"] is False and sent["options"] == {"seed": 7, "temperature": 0.2}
+
+
+@pytest.mark.parametrize("sentence", [
+    "Your risk is quite a bit higher if you keep smoking.",
+    "Smoking is not safe for your lungs.",
+    "If you have questions about lung disease, talk to your doctor.",
+    "You will not get a diagnosis from this app.",
+])
+def test_v3_review_false_alarms_fixed(result, sentence):
+    draft = "Your chance of lung cancer over the next {plco.horizon} is {plco.display}. " + sentence
+    assert verify(draft, result) == []
+
+
+@pytest.mark.parametrize("sentence,rule", [
+    ("You will not get lung cancer.", "R5_reassurance"),
+    ("You are safe.", "R5_reassurance"),
+    ("You've got cancer in your lungs.", "R6_diagnosis"),
+    ("You have lung cancer.", "R6_diagnosis"),
+])
+def test_v3_still_catches(result, sentence, rule):
+    assert rule in rules(sentence, result)
+
+
+def test_v3_romanian():
+    q = Questionnaire(age=60, education=3, bmi=26, smoking_status="current", cigs_per_day=20,
+                      smoking_years=40, language="ro")
+    res = build_result(q)
+    h = "Riscul estimat de cancer pulmonar în următorii {plco.horizon} este {plco.display}. "
+    assert verify(h + "Spune-mi mie dacă ai întrebări.", res) == []
+    assert verify(h + "Aceasta este una dintre cele mai bune decizii.", res) == []
+    assert "R6_diagnosis" in rules(h + "Ai cancerul pulmonar.", res)
+    assert "R5_reassurance" in rules(h + "Ești în afara oricărui pericol.", res)
+    assert "R1_number" in rules(h + "O mie de oameni.", res)
