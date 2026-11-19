@@ -24,9 +24,7 @@ def available() -> bool:
 
 @functools.lru_cache(maxsize=1)
 def _model():
-    import torch
     import torchxrayvision as xrv
-    torch.set_num_threads(max(1, torch.get_num_threads()))
     m = xrv.models.DenseNet(weights="densenet121-res224-all")
     m.eval()
     return m

@@ -41,7 +41,6 @@ NUMBER_WORDS = {
 # v2: "one" is common in normal English ("one person", "no one"), so it counts as
 # a number only when used as a quantity ("one in fifty", "one out of", "one percent").
 ONE_AS_NUMBER = re.compile(r"(?<![\w-])one(?=\s+(?:in|out|per|of every|hundred|thousand|percent)\b|\s*%)")
-ALLOWED_NUMBER_PHRASES = {"en": [], "ro": []}
 
 PERIOD_PHRASES = {
     "en": ["lifetime", "per year", "each year", "every year", "annual", "annually",
@@ -138,8 +137,6 @@ def verify(draft: str, result: dict) -> list[Violation]:
     if DIGIT_RE.search(MARKER_RE.sub(" ", draft)):
         v.append(Violation("R1_number", "digit written by the model"))
     scrub = low_words
-    for ph in ALLOWED_NUMBER_PHRASES.get(lang, []):
-        scrub = scrub.replace(ph, " ")
     if lang == "en" and ONE_AS_NUMBER.search(scrub):
         v.append(Violation("R1_number", "number word 'one'"))
     for w in NUMBER_WORDS[lang]:
@@ -230,34 +227,3 @@ def verify(draft: str, result: dict) -> list[Violation]:
 def fill(draft: str, result: dict) -> str:
     allowed = allowed_markers(result)
     return MARKER_RE.sub(lambda m: allowed.get(m.group(1), m.group(0)), draft)
-
-
-# ---------------------------------------------------------------------------
-# Baseline used for comparison in experiment E1: a simple number-matching check
-# on the FILLED text (every number must appear in the structured result), in the
-# style of the validator first drafted in the thesis plan (Chapter 7.4).
-NUM_RE = re.compile(r"(?<![\w.])\d+(?:[.,]\d+)?")
-
-
-def baseline_check(filled_text: str, result: dict) -> list[str]:
-    allowed: set[str] = {"100"}
-
-    def walk(o):
-        if isinstance(o, dict):
-            for val in o.values():
-                walk(val)
-        elif isinstance(o, list):
-            for val in o:
-                walk(val)
-        elif isinstance(o, (int, float)) and not isinstance(o, bool):
-            for x in (o, o * 100):
-                allowed.update({f"{x:g}", str(round(x)), f"{x:.1f}".rstrip("0").rstrip(".")})
-        elif isinstance(o, str):
-            allowed.update(NUM_RE.findall(o))
-
-    walk(result)
-    # v2: the scenario years (keys "y3", "y5", "y7") are legitimate numbers too
-    for block in result.get("scenarios", {}).values():
-        allowed.update(k[1:] for k in block if re.fullmatch(r"y\d+", k))
-    return [f"number not in result: {n}" for n in NUM_RE.findall(filled_text)
-            if n.replace(",", ".") not in allowed]

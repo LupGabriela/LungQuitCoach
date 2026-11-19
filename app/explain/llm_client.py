@@ -1,6 +1,6 @@
 """LLM clients. The local client talks to an Ollama server over its REST API
-(POST /api/generate on port 11434 by default). Tests use FakeLLM, so no model is
-needed to run the test suite."""
+(POST /api/generate on port 11434 by default). Tests use a fake model
+(tests/fakes.py), so no model is needed to run the test suite."""
 from __future__ import annotations
 
 import json
@@ -25,33 +25,27 @@ Rules:
 
 
 class LLM(Protocol):
-    name: str
-
     def generate(self, prompt: str) -> str: ...
 
 
 class OllamaLLM:
-    def __init__(self, model: str = "qwen3:4b", host: str | None = None, timeout: int = 300):
-        self.name = f"ollama:{model}"
+    def __init__(self, model: str = "qwen3:4b", host: str | None = None, timeout: int = 300,
+                 temperature: float | None = None, seed: int = 2026):
         self.model = model
+        self.temperature = temperature  # None = the model's default
+        self.seed = seed
         self.host = host or os.environ.get("OLLAMA_HOST", "http://localhost:11434")
         self.timeout = timeout
 
     def generate(self, prompt: str) -> str:
+        options: dict = {"seed": self.seed}
+        if self.temperature is not None:
+            options["temperature"] = self.temperature
+        # think=False: Qwen 3 thinks by default, which would make a CPU-only
+        # laptop write a long hidden reasoning trace before every explanation
         body = json.dumps({"model": self.model, "system": SYSTEM_PROMPT, "prompt": prompt,
-                           "stream": False}).encode()
+                           "stream": False, "think": False, "options": options}).encode()
         req = urllib.request.Request(f"{self.host}/api/generate", data=body,
                                      headers={"Content-Type": "application/json"})
         with urllib.request.urlopen(req, timeout=self.timeout) as r:
             return json.loads(r.read())["response"]
-
-
-class FakeLLM:
-    """Returns pre-set drafts in order. Used in tests and in the offline demo."""
-
-    def __init__(self, drafts: list[str]):
-        self.name = "fake"
-        self._drafts = list(drafts)
-
-    def generate(self, prompt: str) -> str:
-        return self._drafts.pop(0) if self._drafts else ""

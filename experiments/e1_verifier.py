@@ -16,7 +16,8 @@ from pathlib import Path
 import numpy as np
 from scipy.stats import bootstrap
 
-from app.explain.verifier import baseline_check, fill, verify
+from app.explain.verifier import fill, verify
+from experiments.baseline import baseline_check
 from app.result import build_result
 from experiments.cases import make_cases
 from experiments.texts import DEV, ERROR_TYPES, TEST, TEST_B, correct_draft, inject

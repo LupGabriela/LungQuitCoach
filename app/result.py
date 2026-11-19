@@ -37,7 +37,7 @@ def build_result(q: Questionnaire, xray: XrayInfo | None = None) -> dict:
         for pt in block["points"]:
             scenarios[name][f"y{pt['year']}"] = {
                 "risk_6y": pt["risk_6y"],
-                "display": as_in_100(pt["risk_6y"]),
+                "display": as_in_100(pt["risk_6y"], q.language),
                 "outside_validated_age": pt["outside_validated_age"],
             }
     # Directions are computed in code, never by the LLM. A choice (quit / increase)
@@ -58,7 +58,7 @@ def build_result(q: Questionnaire, xray: XrayInfo | None = None) -> dict:
         "smoking_status": q.smoking_status,
         "plco": {
             "risk_6y": p,
-            "display": as_in_100(p),
+            "display": as_in_100(p, q.language),
             "horizon_years": HORIZON_YEARS,
             "horizon_display": f"{HORIZON_YEARS} years" if q.language == "en" else f"{HORIZON_YEARS} ani",
             "outside_validated_age": not in_validated_age_range(q.age),
@@ -72,7 +72,11 @@ def build_result(q: Questionnaire, xray: XrayInfo | None = None) -> dict:
 def allowed_markers(result: dict) -> dict[str, str]:
     """Map every marker the LLM may use to the text the program fills in."""
     m = {"plco.display": result["plco"]["display"],
-         "plco.horizon": result["plco"]["horizon_display"]}
+         "plco.horizon": result["plco"]["horizon_display"],
+         # adjective form, e.g. "6-year chance": a future scenario value is still a
+         # 6-year risk, only calculated again later
+         "plco.horizon_adj": (f"{result['plco']['horizon_years']}-year" if result["language"] == "en"
+                              else f"pe {result['plco']['horizon_years']} ani")}
     for name, block in result["scenarios"].items():
         for key, val in block.items():
             if key.startswith("y"):

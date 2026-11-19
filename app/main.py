@@ -52,12 +52,14 @@ def explain_endpoint(req: ExplainRequest) -> dict:
 
 
 @app.post("/xray")
-async def xray_endpoint(file: UploadFile = File(...)) -> dict:
+def xray_endpoint(file: UploadFile = File(...)) -> dict:
+    # plain def on purpose: FastAPI runs it in a threadpool, so the CPU-heavy
+    # model call does not block other requests
     if not xray.available():
         raise HTTPException(status_code=503, detail="TorchXRayVision is not installed")
     from PIL import Image
     import numpy as np
-    data = await file.read()
+    data = file.file.read()
     try:
         img = np.array(Image.open(io.BytesIO(data)).convert("L"))
     except Exception as exc:

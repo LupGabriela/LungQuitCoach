@@ -5,7 +5,7 @@ The structured result is the ONLY source of facts for the explanation step.
 """
 from __future__ import annotations
 
-from typing import Literal, Optional
+from typing import Literal
 
 from pydantic import BaseModel, Field, model_validator
 
@@ -31,20 +31,29 @@ class Questionnaire(BaseModel):
     def _check(self) -> "Questionnaire":
         if self.smoking_status == "current" and self.quit_years != 0:
             raise ValueError("current smokers must have quit_years = 0")
-        if self.smoking_years > self.age:
-            raise ValueError("smoking_years cannot exceed age")
+        if self.smoking_years + self.quit_years > self.age:
+            raise ValueError("years smoked plus years since quitting cannot exceed age")
         return self
+
+
+# Output names of the TorchXRayVision DenseNet-121 "all" model. Only these may
+# reach the explanation: finding names are pasted into the text after the
+# verifier has run, so free text here would bypass the verifier.
+XrayLabel = Literal["Atelectasis", "Cardiomegaly", "Consolidation", "Edema", "Effusion",
+                    "Emphysema", "Enlarged Cardiomediastinum", "Fibrosis", "Fracture", "Hernia",
+                    "Infiltration", "Lung Lesion", "Lung Opacity", "Mass", "Nodule",
+                    "Pleural_Thickening", "Pneumonia", "Pneumothorax"]
 
 
 class XrayInfo(BaseModel):
     provided: bool = False
-    flagged: list[str] = []
-    not_flagged: list[str] = []
+    flagged: list[XrayLabel] = []
+    not_flagged: list[XrayLabel] = []
 
 
 class ExplainRequest(BaseModel):
     questionnaire: Questionnaire
-    xray: Optional[XrayInfo] = None
+    xray: XrayInfo | None = None
 
 
 class Explanation(BaseModel):

@@ -50,3 +50,4 @@ def test_age_range_and_display():
     assert in_validated_age_range(55) and in_validated_age_range(74)
     assert not in_validated_age_range(54) and not in_validated_age_range(75)
     assert as_in_100(0.01750922) == "1.8 in 100"
+    assert as_in_100(0.01750922, "ro") == "1,8 din 100"

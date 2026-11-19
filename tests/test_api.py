@@ -40,9 +40,22 @@ def test_explain_endpoint_returns_checked_text():
 
 def test_llm_text_carries_ai_notice(monkeypatch):
     import app.main as m
-    from app.explain.llm_client import FakeLLM
+    from tests.fakes import FakeLLM
     good = "Your chance of lung cancer over the next {plco.horizon} is {plco.display}."
     monkeypatch.setattr(m, "_llm", lambda: FakeLLM([good]))
     r = client.post("/explain", json={"questionnaire": Q})
     body = r.json()
     assert body["explanation"]["source"] == "llm" and "AI system" in body["ai_notice"]
+
+
+def test_free_text_finding_names_are_rejected():
+    # regression: finding names used to be pasted into the text unchecked
+    bad = {"questionnaire": Q, "xray": {"provided": True, "flagged": ["you are safe"]}}
+    assert client.post("/explain", json=bad).status_code == 422
+    ok = {"questionnaire": Q, "xray": {"provided": True, "flagged": ["Nodule"]}}
+    assert client.post("/explain", json=ok).status_code == 200
+
+
+def test_impossible_smoking_history_rejected():
+    bad = dict(Q, age=50, smoking_years=45, quit_years=20)
+    assert client.post("/risk", json=bad).status_code == 422

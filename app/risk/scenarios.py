@@ -57,8 +57,8 @@ def project(x: PlcoInputs, scenario: str, t: int) -> PlcoInputs | None:
 
 
 def run_scenarios(x: PlcoInputs, years: tuple[int, ...] = YEARS) -> dict:
-    """Compute the 6-year risk now and at each future year for each scenario."""
-    out: dict = {"baseline": risk_6y(x), "scenarios": {}}
+    """Compute the 6-year risk at each future year for each scenario."""
+    out: dict = {"scenarios": {}}
     for name in LABELS:
         points = []
         for t in years:
@@ -68,7 +68,6 @@ def run_scenarios(x: PlcoInputs, years: tuple[int, ...] = YEARS) -> dict:
             points.append({
                 "year": t,
                 "risk_6y": risk_6y(px),
-                "age_at_year": px.age,
                 "outside_validated_age": not in_validated_age_range(px.age),
             })
         if points:

@@ -101,6 +101,9 @@ def in_validated_age_range(age: float) -> bool:
     return lo <= age <= hi
 
 
-def as_in_100(p: float) -> str:
-    """Display a probability as 'x in 100' with one decimal (design choice)."""
+def as_in_100(p: float, language: str = "en") -> str:
+    """Display a probability as 'x in 100' with one decimal (design choice);
+    Romanian uses a decimal comma: '2,2 din 100'."""
+    if language == "ro":
+        return f"{p * 100:.1f}".replace(".", ",") + " din 100"
     return f"{p * 100:.1f} in 100"

@@ -1,9 +1,10 @@
 import pytest
 
 from app.explain.pipeline import explain
-from app.explain.llm_client import FakeLLM
+from tests.fakes import FakeLLM
 from app.explain.template import template_draft
-from app.explain.verifier import baseline_check, fill, verify
+from app.explain.verifier import fill, verify
+from experiments.baseline import baseline_check
 from app.result import build_result
 from app.schemas import Questionnaire, XrayInfo
 
@@ -117,3 +118,28 @@ def test_template_passes_on_generated_cases():
         for q, xr in make_cases(200, seed=11, language=lang):
             res = build_result(q, xr)
             assert verify(template_draft(res), res) == []
+
+
+def test_ollama_request_disables_thinking_and_fixes_seed(monkeypatch):
+    import json
+    import urllib.request
+    from app.explain.llm_client import OllamaLLM
+    sent = {}
+
+    class Resp:
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *a):
+            return False
+
+        def read(self):
+            return json.dumps({"response": "ok"}).encode()
+
+    def fake_urlopen(req, timeout):
+        sent.update(json.loads(req.data))
+        return Resp()
+
+    monkeypatch.setattr(urllib.request, "urlopen", fake_urlopen)
+    assert OllamaLLM(temperature=0.2, seed=7).generate("hi") == "ok"
+    assert sent["think"] is False and sent["options"] == {"seed": 7, "temperature": 0.2}
