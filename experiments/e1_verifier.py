@@ -20,9 +20,10 @@ from app.explain.verifier import fill, verify
 from experiments.baseline import baseline_check
 from app.result import build_result
 from experiments.cases import make_cases
-from experiments.texts import DEV, ERROR_TYPES, TEST, TEST_B, correct_draft, inject
+from experiments.texts import (CORRECT_B, DEV, ERROR_TYPES, TEST, TEST_B, TEST_C, correct_draft,
+                              inject)
 
-SPLITS = (("dev", DEV), ("test", TEST), ("test_b", TEST_B))
+SPLITS = (("dev", DEV), ("test", TEST), ("test_b", TEST_B), ("test_c", TEST_C))
 
 OUT = Path(__file__).parent / "results"
 EXPECTED_RULE = {"number": "R1_number", "period": "R2_period", "unit": "R3_unit",
@@ -55,6 +56,9 @@ def main(n: int, seed: int, tag: str = "latest") -> dict:
         res = build_result(q, xr)
         good = correct_draft(res, rng)
         rows.append(dict(case=i, split="correct", error_type="none", op="", draft=good, result=res))
+        extra = rng.choice(CORRECT_B)
+        rows.append(dict(case=i, split="correct_b", error_type="none", op=extra,
+                         draft=inject(good, ("append", extra)), result=res))
         for et in ERROR_TYPES:
             for split, pool in SPLITS:
                 ops = [op for op in pool[et] if et != "finding" or _finding_ok(op, res)]
@@ -75,6 +79,13 @@ def main(n: int, seed: int, tag: str = "latest") -> dict:
     summary["false_alarm_rate"] = {
         "verifier": round(sum(r["verifier_flag"] for r in correct) / len(correct), 3),
         "baseline": round(sum(r["baseline_flag"] for r in correct) / len(correct), 3)}
+    correct_b = [r for r in rows if r["split"] == "correct_b"]
+    summary["false_alarm_rate_correct_b"] = {
+        "verifier": round(sum(r["verifier_flag"] for r in correct_b) / len(correct_b), 3),
+        "baseline": round(sum(r["baseline_flag"] for r in correct_b) / len(correct_b), 3)}
+    summary["false_alarms_correct_b_by_sentence"] = {
+        o: sum(1 for r in correct_b if r["op"] == o and r["verifier_flag"])
+        for o in sorted({r["op"] for r in correct_b})}
     summary["false_alarm_examples"] = [
         {"draft": r["draft"], "rules": r["verifier_rules"]} for r in correct if r["verifier_flag"]][:5]
     for split, _ in SPLITS:

@@ -146,3 +146,54 @@ TEST_B = {
                 ("append", "There are signs of fibrosis on the image."),
                 ("append", "A lesion was seen in the upper lobe.")],
 }
+
+# ---------------------------------------------------------------------------
+# Written on 19 Nov 2026 AFTER the code review and BEFORE verifier v3 was
+# written or run. Neither set uses the review's examples ("quite", "not safe",
+# "you have questions about lung disease", "will not get a diagnosis"), which
+# became development material for v3.
+#
+# TEST_C: unseen error wordings.
+TEST_C = {
+    "number": [("sub", "{plco.display}", "a little above 2 in 100"),
+               ("append", "About a fifth of smokers like you will get it."),
+               ("sub", "{plco.display}", "roughly a 1-in-40 chance")],
+    "period": [("sub", "{plco.horizon}", "the months ahead"),
+               ("sub", "{plco.horizon}", "your whole life"),
+               ("sub", "{plco.horizon}", "the long run")],
+    "unit": [("sub", "{plco.display}", "{plco.display} percent of the time"),
+             ("append", "Your chance is several times the average."),
+             ("sub", "{plco.display}", "{plco.display} per cent")],
+    "direction": [("append", "Stopping smoking would bump your risk up."),
+                  ("append", "Carrying on smoking will lower your risk."),
+                  ("append", "Quitting means your chance will grow.")],
+    "reassurance": [("append", "You do not need to worry about lung cancer."),
+                    ("append", "Your lungs are fine."),
+                    ("append", "There is nothing to be concerned about.")],
+    "diagnosis": [("append", "You have lung cancer in its early stage."),
+                  ("append", "The test shows you have a lung tumour."),
+                  ("append", "You are free of lung disease.")],
+    "finding": [("append", "The X-ray shows a nodule in the right lung."),
+                ("append", "A small mass was found on your scan."),
+                ("append", "Signs of fibrosis are visible.")],
+}
+
+# CORRECT_B: correct but tricky sentences (negation, look-alike words, phrases
+# that contain a listed phrase in a harmless context). One is inserted into each
+# correct draft to measure false alarms on unseen correct wording.
+CORRECT_B = [
+    "Smoking is never a safe habit for your lungs.",
+    "If you have any worries about lung disease, a doctor can help.",
+    "Nobody can promise that you will stay healthy.",
+    "A quiet moment to think about these numbers can help.",
+    "Stopping smoking is hard, and many people need several tries.",
+    "Help to quit is free in many countries.",
+    "This tool cannot say that you are fine or that you are ill.",
+    "The model does not check your heart, only your lung cancer risk.",
+    "Talk to a doctor before you decide anything about screening.",
+    "Your doctor can tell you whether a scan makes sense for you.",
+    "None of this means you will or will not get lung cancer.",
+    "Even with a lower chance, regular check-ups still matter.",
+    "Many people find it easier to quit with support from a counsellor.",
+    "Your doctor did not diagnose anything through this app.",
+]
